@@ -328,6 +328,9 @@ function setLang(l) {
   if (btn) btn.textContent = l === 'en' ? 'EN' : 'ID';
   applyLangToLogin();
   if (currentUser) rerenderCurrentPage();
+    applyLangToLogin();
+  if (currentUser) rerenderCurrentPage();
+  else showLoginScreen();
 }
 
 function toggleLang() {
