@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kabut Estate — Smart Tea Plantation Monitor</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- Sky tint + edge pulse + particle canvas (shared overlays) -->
+<div id="sky-overlay" aria-hidden="true"></div>
+<div id="edge-pulse" aria-hidden="true"></div>
+<canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+<!-- ============================================================
+     LANGUAGE SELECTION SCREEN
+     ============================================================ -->
+<div id="lang-screen" role="main" aria-label="Language Selection">
+  <h1>☁ Kabut Estate</h1>
+  <p id="lang-tagline">Select your language / Pilih bahasa Anda</p>
+  <div class="lang-btn-row">
+    <button class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
+    <button class="lang-btn" onclick="setLang('id')">🇮🇩 Bahasa Indonesia</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     LOGIN SCREEN
+     ============================================================ -->
+<div id="login-screen" style="display:none;" role="main">
+  <div class="login-bg"></div>
+  <div class="mist-layer" aria-hidden="true"></div>
+  <div class="mist-layer2" aria-hidden="true"></div>
+  <div class="tea-rows" aria-hidden="true"></div>
+  <div class="login-card">
+    <div class="login-logo">☁ Kabut Estate</div>
+    <div class="login-subtitle" id="ls-subtitle">Smart Tea Plantation Monitor · Highland Indonesia</div>
+    <form id="login-form" onsubmit="doLogin(event)">
+      <div class="form-group">
+        <label for="uname" id="lbl-uname">Username</label>
+        <input type="text" id="uname" name="username" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label for="upass" id="lbl-upass">Password</label>
+        <input type="password" id="upass" name="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="login-btn" id="login-submit-btn">Sign In</button>
+      <div class="login-error" id="login-error" role="alert" aria-live="polite"></div>
+    </form>
+    <div class="demo-accounts">
+      <h4 id="demo-title">Demo Accounts (tap to fill)</h4>
+      <div class="demo-row" tabindex="0" onclick="fillDemo('owner','owner123')" onkeydown="if(event.key==='Enter')fillDemo('owner','owner123')">
+        <span>owner / owner123</span><span class="demo-role" id="role-owner-label">Owner</span>
+      </div>
+      <div class="demo-row" tabindex="0" onclick="fillDemo('mandor','mandor123')" onkeydown="if(event.key==='Enter')fillDemo('mandor','mandor123')">
+        <span>mandor / mandor123</span><span class="demo-role" id="role-mandor-label">Foreman</span>
+      </div>
+      <div class="demo-row" tabindex="0" onclick="fillDemo('pekerja','pekerja123')" onkeydown="if(event.key==='Enter')fillDemo('pekerja','pekerja123')">
+        <span>pekerja / pekerja123</span><span class="demo-role" id="role-worker-label">Field Worker (Block C)</span>
+      </div>
+    </div>
+    <div class="how-to">
+      <h5 id="how-title">How to explore</h5>
+      <ol id="how-steps">
+        <li>Sign in with a demo role above</li>
+        <li>Go to Dashboard → run a scenario in Simulation Center</li>
+        <li>Visit Bob & Reports and ask a question</li>
+      </ol>
+    </div>
+    <a href="#" class="change-lang-link" id="change-lang-link" onclick="showLangScreen();return false;">← Change language</a>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN APP
+     ============================================================ -->
+<div id="app">
+  <!-- NAVBAR -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <div style="display:flex;align-items:center;gap:0.3rem;">
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false" onclick="toggleHamburger()">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="nav-logo">☁ Kabut Estate</span>
+      <span class="nav-clock" id="nav-clock">05:00</span>
+    </div>
+    <div class="nav-links" id="nav-links" role="menubar">
+      <a href="#dashboard" class="nav-link" id="nav-dashboard" role="menuitem">Dashboard</a>
+      <a href="#workers" class="nav-link" id="nav-workers" role="menuitem">Workers</a>
+      <a href="#bob" class="nav-link" id="nav-bob" role="menuitem">Bob & Reports</a>
+    </div>
+    <div class="nav-right">
+      <span class="status-badge" id="status-badge">NOMINAL</span>
+      <span class="nav-user" id="nav-user">—</span>
+      <button class="lang-toggle" id="lang-toggle-btn" onclick="toggleLang()" aria-label="Toggle language">EN</button>
+      <button class="logout-btn" id="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Mobile nav -->
+  <div id="mobile-nav" role="menu" aria-label="Mobile menu">
+    <a href="#dashboard" class="nav-link" role="menuitem" onclick="closeMobileNav()">Dashboard</a>
+    <a href="#workers" class="nav-link" role="menuitem" onclick="closeMobileNav()">Workers</a>
+    <a href="#bob" class="nav-link" role="menuitem" onclick="closeMobileNav()">Bob & Reports</a>
+  </div>
+
+  <!-- WARNING BANNER -->
+  <div id="warning-banner" role="alert" aria-live="assertive" aria-atomic="true">
+    <span class="banner-icon" id="banner-icon">⚠</span>
+    <div class="banner-body">
+      <div class="banner-title" id="banner-title">—</div>
+      <div class="banner-desc" id="banner-desc">—</div>
+      <div class="banner-bob" id="banner-bob">—</div>
+    </div>
+  </div>
+
+  <!-- PAGE CONTENT -->
+  <main id="page-content" role="main" aria-live="polite">
+    <!-- rendered by JS -->
+  </main>
+</div>
+
+</body>
+</html>
